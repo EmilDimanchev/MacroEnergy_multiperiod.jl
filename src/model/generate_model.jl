@@ -244,6 +244,13 @@ function carry_over_capacities!(y::Union{AbstractEdge,AbstractStorage},y_prev::U
                     y.learning_pwl_track[prev_period] = learning_pwl_track(y_prev, prev_period)
                     y.segments_sos1_track[prev_period] = segments_sos1_track(y_prev,prev_period)
                 end
+                # Shadow capacity
+                y.new_de_capacity_track[prev_period] = new_de_capacity_track(y_prev,prev_period)
+                y.new_af_capacity_track[prev_period] = new_af_capacity_track(y_prev,prev_period)
+                y.new_cc_capacity_track[prev_period] = new_cc_capacity_track(y_prev,prev_period)
+                y.de_capacity_track[prev_period] = de_capacity_track(y_prev,prev_period)
+                y.af_capacity_track[prev_period] = af_capacity_track(y_prev,prev_period)
+                y.cc_capacity_track[prev_period] = cc_capacity_track(y_prev,prev_period)
             else
                 y.new_capacity_track[prev_period] = value(new_capacity_track(y_prev,prev_period))
                 y.retired_capacity_track[prev_period] = value(retired_capacity_track(y_prev,prev_period))

@@ -62,6 +62,26 @@ macro AbstractEdgeBaseAttributes()
         annualization_factor::Float64 = 0.0
         endog_annualized_cost::AffExpr = AffExpr(0.0)
         cumulative_external_capacity::Float64 = 0.0
+        # Shadow
+        # Definition and evaluation (DE)
+        de_cost::Float64 = 0.0
+        new_de_capacity::AffExpr = AffExpr(0.0)
+        new_de_capacity_track::Dict{Int64,AffExpr} = Dict(1=>AffExpr(0.0))
+        de_capacity::AffExpr = AffExpr(0.0)
+        de_capacity_track::Dict{Int64,AffExpr} = Dict(1=>AffExpr(0.0))
+        new_de_units::Union{JuMPVariable,Float64} = 0.0
+        # Approvals and funding (AF)
+        new_af_capacity::AffExpr = AffExpr(0.0)
+        new_af_capacity_track::Dict{Int64,AffExpr} = Dict(1=>AffExpr(0.0))
+        af_capacity::AffExpr = AffExpr(0.0)
+        af_capacity_track::Dict{Int64,AffExpr} = Dict(1=>AffExpr(0.0))
+        new_af_units::Union{JuMPVariable,Float64} = 0.0
+        # Construction and Commissioning (CC)
+        new_cc_capacity::AffExpr = AffExpr(0.0)
+        new_cc_capacity_track::Dict{Int64,AffExpr} = Dict(1=>AffExpr(0.0))
+        cc_capacity::AffExpr = AffExpr(0.0)
+        cc_capacity_track::Dict{Int64,AffExpr} = Dict(1=>AffExpr(0.0))
+        new_cc_units::Union{JuMPVariable,Float64} = 0.0
     end)
 end
 
@@ -259,6 +279,31 @@ annuities_mult(e::AbstractEdge) = e.annuities_mult;
 annualization_factor(e::AbstractEdge) = e.annualization_factor;
 endog_annualized_cost(e::AbstractEdge) = e.endog_annualized_cost;
 cumulative_external_capacity(e::AbstractEdge) = e.cumulative_external_capacity;
+# Shadow
+# Definition and evaluation (DE)
+new_de_capacity(e::AbstractEdge) = e.new_de_capacity;
+de_capacity(e::AbstractEdge) = e.de_capacity;
+new_de_capacity_track(e::AbstractEdge) = e.new_de_capacity_track;
+new_de_capacity_track(e::AbstractEdge,s::Int64) = (haskey(new_de_capacity_track(e),s) == false) ? 0.0 : e.new_de_capacity_track[s];
+de_capacity_track(e::AbstractEdge) = e.de_capacity_track;
+de_capacity_track(e::AbstractEdge,s::Int64) = (haskey(de_capacity_track(e),s) == false) ? 0.0 : e.de_capacity_track[s];
+new_de_units(e::AbstractEdge) = e.new_de_units;
+# Approvals and funding (AF)
+new_af_capacity(e::AbstractEdge) = e.new_af_capacity;
+af_capacity(e::AbstractEdge) = e.af_capacity;
+new_af_capacity_track(e::AbstractEdge) = e.new_af_capacity_track;
+new_af_capacity_track(e::AbstractEdge,s::Int64) = (haskey(new_af_capacity_track(e),s) == false) ? 0.0 : e.new_af_capacity_track[s];
+af_capacity_track(e::AbstractEdge) = e.af_capacity_track;
+af_capacity_track(e::AbstractEdge,s::Int64) = (haskey(af_capacity_track(e),s) == false) ? 0.0 : e.af_capacity_track[s];
+new_af_units(e::AbstractEdge) = e.new_af_units;
+# Construction and commissioning (CC)
+new_cc_capacity(e::AbstractEdge) = e.new_cc_capacity;
+cc_capacity(e::AbstractEdge) = e.cc_capacity;
+new_cc_capacity_track(e::AbstractEdge) = e.new_cc_capacity_track;
+new_cc_capacity_track(e::AbstractEdge,s::Int64) = (haskey(new_cc_capacity_track(e),s) == false) ? 0.0 : e.new_cc_capacity_track[s];
+cc_capacity_track(e::AbstractEdge) = e.cc_capacity_track;
+cc_capacity_track(e::AbstractEdge,s::Int64) = (haskey(cc_capacity_track(e),s) == false) ? 0.0 : e.cc_capacity_track[s];
+new_cc_units(e::AbstractEdge) = e.new_cc_units;
 ##### End of Edge interface #####
 
 function add_linking_variables!(e::AbstractEdge, model::Model)
@@ -293,6 +338,26 @@ function define_available_capacity!(e::AbstractEdge, model::Model)
         #     model,
         #     new_capacity(e) - retired_capacity(e) + existing_capacity(e)
         # )
+
+        # Shadow
+        # Definition and evaluation (DE)
+        e.new_de_units = @variable(model, lower_bound = 0.0, base_name = "vNEWDEUNIT_$(id(e))_stage$(period_index(e))")
+        e.new_de_capacity = @expression(model, capacity_size(e) * new_de_units(e))
+        e.new_de_capacity_track[period_index(e)] = new_de_capacity(e)
+        e.de_capacity = @variable(model, lower_bound = 0.0, base_name = "vDECAP_$(id(e))_stage$(period_index(e))")
+        e.de_capacity_track[period_index(e)] = de_capacity(e)
+        # Approvals and funding (AF)
+        e.new_af_units = @variable(model, lower_bound = 0.0, base_name = "vNEWAFUNIT_$(id(e))_stage$(period_index(e))")
+        e.new_af_capacity = @expression(model, capacity_size(e) * new_af_units(e))
+        e.new_af_capacity_track[period_index(e)] = new_af_capacity(e)
+        e.af_capacity = @variable(model, lower_bound = 0.0, base_name = "vAFCAP_$(id(e))_stage$(period_index(e))")
+        e.af_capacity_track[period_index(e)] = af_capacity(e)
+        # Construction and commissioning (CC)
+        e.new_cc_units = @variable(model, lower_bound = 0.0, base_name = "vNEWCCUNIT_$(id(e))_stage$(period_index(e))")
+        e.new_cc_capacity = @expression(model, capacity_size(e) * new_cc_units(e))
+        e.new_cc_capacity_track[period_index(e)] = new_cc_capacity(e)
+        e.cc_capacity = @variable(model, lower_bound = 0.0, base_name = "vCCCAP_$(id(e))_stage$(period_index(e))")
+        e.cc_capacity_track[period_index(e)] = cc_capacity(e)
     end
 
     return nothing
@@ -437,7 +502,21 @@ function compute_investment_costs!(e::AbstractEdge, model::Model)
             end
             ### End of linearized version
 
-
+            # add_to_expression!(
+            #     model[:eInvestmentFixedCost],
+            #     annualized_investment_cost(e)*annuities_mult(e)*0,
+            #     new_de_capacity(e),
+            # )
+            # add_to_expression!(
+            #     model[:eInvestmentFixedCost],
+            #     annualized_investment_cost(e)*annuities_mult(e)*0,
+            #     new_af_capacity(e),
+            # )
+            # add_to_expression!(
+            #     model[:eInvestmentFixedCost],
+            #     annualized_investment_cost(e)*annuities_mult(e)*0,
+            #     new_cc_capacity(e),
+            # )
             # Old 
             # add_to_expression!(
             #         model[:eFixedCost],
