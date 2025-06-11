@@ -28,8 +28,8 @@
                         "can_expand": true,
                         "constraints": {
                             "CapacityConstraint": true,
-                            "MaxCapacityConstraint": false,
-                            "MaxCapacityGrowthConstraint": false,
+                            "MaxCapacityConstraint": true,
+                            "MaxCapacityGrowthConstraint": true,
                             "DevelopmentConstraint": true
                         },
                         "min_capacity": 0,

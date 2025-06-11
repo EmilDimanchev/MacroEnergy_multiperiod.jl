@@ -16,7 +16,7 @@ function add_model_constraint!(ct::MaxCapacityGrowthConstraint, y::Union{Abstrac
     
     # Limit rate of increase
     if curr_stage >= 2
-        ct.constraint_ref = @constraint(model, new_capacity_track(y,curr_stage) <= (1+CAGR)*new_capacity_track(y, prev_stage))
+        ct.constraint_ref = @constraint(model, new_capacity_track(y,curr_stage) <= max_new_capacity_init(y) + (1+CAGR)*new_capacity_track(y, prev_stage))
     end
 
     # Limit rate of decrease

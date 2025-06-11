@@ -63,6 +63,9 @@ macro AbstractEdgeBaseAttributes()
         endog_annualized_cost::AffExpr = AffExpr(0.0)
         cumulative_external_capacity::Float64 = 0.0
         # Shadow
+        de_duration::Float64 = $edge_defaults[:de_duration]
+        af_duration::Float64 = $edge_defaults[:af_duration]
+        cc_duration::Float64 = $edge_defaults[:cc_duration]
         # Definition and evaluation (DE)
         de_cost::Float64 = 0.0
         new_de_capacity::AffExpr = AffExpr(0.0)
@@ -82,6 +85,8 @@ macro AbstractEdgeBaseAttributes()
         cc_capacity::AffExpr = AffExpr(0.0)
         cc_capacity_track::Dict{Int64,AffExpr} = Dict(1=>AffExpr(0.0))
         new_cc_units::Union{JuMPVariable,Float64} = 0.0
+        # Max growth formulation
+        max_new_capacity_init::Float64 = 0.0
     end)
 end
 
@@ -280,6 +285,9 @@ annualization_factor(e::AbstractEdge) = e.annualization_factor;
 endog_annualized_cost(e::AbstractEdge) = e.endog_annualized_cost;
 cumulative_external_capacity(e::AbstractEdge) = e.cumulative_external_capacity;
 # Shadow
+de_duration(e::AbstractEdge) = e.de_duration;
+af_duration(e::AbstractEdge) = e.af_duration;
+cc_duration(e::AbstractEdge) = e.cc_duration;
 # Definition and evaluation (DE)
 new_de_capacity(e::AbstractEdge) = e.new_de_capacity;
 de_capacity(e::AbstractEdge) = e.de_capacity;
@@ -304,6 +312,8 @@ new_cc_capacity_track(e::AbstractEdge,s::Int64) = (haskey(new_cc_capacity_track(
 cc_capacity_track(e::AbstractEdge) = e.cc_capacity_track;
 cc_capacity_track(e::AbstractEdge,s::Int64) = (haskey(cc_capacity_track(e),s) == false) ? 0.0 : e.cc_capacity_track[s];
 new_cc_units(e::AbstractEdge) = e.new_cc_units;
+# Max growth formulation
+max_new_capacity_init(e::AbstractEdge) = e.max_new_capacity_init;
 ##### End of Edge interface #####
 
 function add_linking_variables!(e::AbstractEdge, model::Model)
@@ -502,21 +512,24 @@ function compute_investment_costs!(e::AbstractEdge, model::Model)
             end
             ### End of linearized version
 
-            # add_to_expression!(
-            #     model[:eInvestmentFixedCost],
-            #     annualized_investment_cost(e)*annuities_mult(e)*0,
-            #     new_de_capacity(e),
-            # )
-            # add_to_expression!(
-            #     model[:eInvestmentFixedCost],
-            #     annualized_investment_cost(e)*annuities_mult(e)*0,
-            #     new_af_capacity(e),
-            # )
-            # add_to_expression!(
-            #     model[:eInvestmentFixedCost],
-            #     annualized_investment_cost(e)*annuities_mult(e)*0,
-            #     new_cc_capacity(e),
-            # )
+            # Shadow capacity for project development constraints
+            add_to_expression!(
+                model[:eInvestmentFixedCost],
+                annualized_investment_cost(e)*annuities_mult(e)*0.1,
+                new_de_capacity(e),
+            )
+            add_to_expression!(
+                model[:eInvestmentFixedCost],
+                annualized_investment_cost(e)*annuities_mult(e)*0.1,
+                new_af_capacity(e),
+            )
+            add_to_expression!(
+                model[:eInvestmentFixedCost],
+                annualized_investment_cost(e)*annuities_mult(e)*0.1,
+                new_cc_capacity(e),
+            )
+            
+            
             # Old 
             # add_to_expression!(
             #         model[:eFixedCost],
