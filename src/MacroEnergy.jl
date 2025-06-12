@@ -131,6 +131,7 @@ include("model/optimizer.jl")
 include("model/scaling.jl")
 include("model/solver.jl")
 include("model/myopic.jl")
+include("model/learning.jl")
 include_all_in_folder("model/constraints")
 include_all_in_folder("model/benders")
 
@@ -215,6 +216,7 @@ export AbstractAsset,
     MaxCapacityConstraint,
     MaxCapacityGrowthConstraint,
     DevelopmentConstraint,
+    get_tech_ids,
     MaxNewCapacityConstraint,
     MaxNonServedDemandConstraint,
     MaxNonServedDemandPerSegmentConstraint,

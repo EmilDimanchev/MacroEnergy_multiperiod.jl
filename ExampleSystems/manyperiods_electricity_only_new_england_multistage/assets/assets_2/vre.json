@@ -19,6 +19,7 @@
                 "id": "MA_solar_pv",
                 "edges": {
                     "edge": {
+                        "tech_type": "solar",
                         "can_retire": true,
                         "max_capacity": 10000000,
                         "max_new_capacity": 1000000,
@@ -58,6 +59,7 @@
                 "id": "CT_onshore_wind",
                 "edges": {
                     "edge": {
+                        "tech_type": "wind",
                         "can_retire": true,
                         "max_capacity": 10000000,
                         "max_new_capacity": 1000000,
@@ -97,6 +99,7 @@
                 "id": "CT_solar_pv",
                 "edges": {
                     "edge": {
+                        "tech_type": "solar",
                         "can_retire": true,
                         "max_capacity": 10000000,
                         "max_new_capacity": 1000000,
@@ -136,6 +139,7 @@
                 "id": "ME_onshore_wind",
                 "edges": {
                     "edge": {
+                        "tech_type": "wind",
                         "can_retire": true,
                         "max_capacity": 10000000,
                         "max_new_capacity": 1000000,

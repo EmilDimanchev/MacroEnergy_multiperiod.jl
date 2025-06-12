@@ -385,6 +385,11 @@ function planning_model!(e::AbstractEdge, model::Model)
             error("Maximum capacity not specified for learning technology")
         end
         
+        
+        tech_ids, tech_edges = get_tech_ids(system, tech_type(e))
+        println("edges")
+        println(tech_edges)
+
         # Number of segments
         N = 5
         # Define exogenous points describing the piece-wise linear curve (cumulative cost as a function of cumulative capacity added)
@@ -398,7 +403,7 @@ function planning_model!(e::AbstractEdge, model::Model)
             # Estimate cost from fixed capacity points
             y_points[k] = (1/(1-learning_parameter(e)))*(x_points[k]*cost_point-investment_cost(e)*cumulative_capacity_init(e))
         end
-
+        
         # SOS1 variables for piece-wise linearization
         e.segments_sos1 = @variable(model, [k in 1:N], lower_bound = 0.0, base_name = "vSOS1SEG_$(id(e))_stage$(period_index(e))_seg_$k")
         @constraint(model, [k in 1:N], segments_sos1(e)[k] <= 1)
@@ -413,15 +418,15 @@ function planning_model!(e::AbstractEdge, model::Model)
         cost_period = curr_stage - cc_duration(e)
 
         # Set cumulative_experience as sum of existing capacity and all new capacity
-        @constraint(model, sum(cumulative_experience(e)[k] for k in 1:N) == sum(new_capacity_track(e,k) for k=1:curr_stage) + cumulative_external_capacity(e))
+        @constraint(model, sum(cumulative_experience(e)[k] for k in 1:N) == sum(new_capacity_track(e,k) for k=1:curr_stage, e in tech_edges) + cumulative_external_capacity(e))
 
         # Constraints ensuring segments_sos1 is chosen based on capacity decision
         @constraint(model, [k in 1:N], cumulative_experience(e)[k] >= x_points[k]*segments_sos1(e)[k])
 
         @constraint(model, [k in 1:N], cumulative_experience(e)[k] <= x_points[k+1]*segments_sos1(e)[k])
-        println("points")
-        println(x_points)
-        println(y_points)
+        # println("points")
+        # println(x_points)
+        # println(y_points)
         # Slopes
         # All slopes on PWL curve
         e.pwl_cost_slopes = @expression(model, [k in 1:N], (y_points[k+1] - y_points[k])/(x_points[k+1]-x_points[k]))
