@@ -394,9 +394,9 @@ function planning_model!(e::AbstractEdge, model::Model)
         for k in 1:N+1
             segment_length = (max_capacity(e)-cumulative_capacity_init(e))/N
             x_points[k] = (k-1)*(segment_length)+cumulative_capacity_init(e)
-            cost_point = annualized_investment_cost(e)*(x_points[k]/cumulative_capacity_init(e))^(-learning_parameter(e))
+            cost_point = investment_cost(e)*(x_points[k]/cumulative_capacity_init(e))^(-learning_parameter(e))
             # Estimate cost from fixed capacity points
-            y_points[k] = (1/(1-learning_parameter(e)))*(x_points[k]*cost_point-annualized_investment_cost(e)*cumulative_capacity_init(e))
+            y_points[k] = (1/(1-learning_parameter(e)))*(x_points[k]*cost_point-investment_cost(e)*cumulative_capacity_init(e))
         end
 
         # SOS1 variables for piece-wise linearization
@@ -450,9 +450,9 @@ function planning_model!(e::AbstractEdge, model::Model)
             @constraint(model, [k in 1:N], e.new_capacity - e.aux_new_capacity[k] >= 0)
             @constraint(model, [k in 1:N], e.new_capacity - e.aux_new_capacity[k] <= big_M_capacity*(1-segments_sos1_prev(e)[k]))
             @constraint(model, [k in 1:N], e.aux_new_capacity[k] <= big_M_capacity*e.segments_sos1_prev[k])
-            e.annualized_investment_cost_with_learning = @expression(model, sum(e.pwl_cost_slopes[k]*e.aux_new_capacity[k] for k in 1:N))
+            e.annualized_investment_cost_with_learning = @expression(model, sum(e.pwl_cost_slopes[k]*e.aux_new_capacity[k]*annualization_factor(e) for k in 1:N))
 
-            e.endog_annualized_cost = @expression(model, sum(e.pwl_cost_slopes[k]*e.segments_sos1_prev[k] for k in 1:N))
+            e.endog_annualized_cost = @expression(model, sum(e.pwl_cost_slopes[k]*e.segments_sos1_prev[k]*annualization_factor(e) for k in 1:N))
             # Enf of linearization
         end
     else
