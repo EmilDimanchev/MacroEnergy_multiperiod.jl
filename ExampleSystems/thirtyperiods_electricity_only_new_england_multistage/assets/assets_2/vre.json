@@ -21,12 +21,20 @@
                     "edge": {
                         "can_retire": true,
                         "max_capacity": 10000000,
-                        "max_new_capacity": 2000000,
+                        "max_new_capacity": 1000000,
+                        "max_new_capacity_init": 500000,
                         "learning_parameter":0.33,
-                        "capacity_initial":5000,
+                        "cumulative_capacity_init":1000000,
+                        "cumulative_external_capacity":2000000,
                         "can_expand": true,
+                        "de_duration": 1,
+                        "af_duration": 1,
+                        "cc_duration": 1,
                         "constraints": {
-                            "CapacityConstraint": true
+                            "CapacityConstraint": true,
+                            "MaxCapacityConstraint": true,
+                            "MaxCapacityGrowthConstraint": true,
+                            "DevelopmentConstraint": true
                         },
                         "min_capacity": 0,
                         "commodity": "Electricity",
@@ -52,12 +60,20 @@
                     "edge": {
                         "can_retire": true,
                         "max_capacity": 10000000,
-                        "max_new_capacity": 2000000,
+                        "max_new_capacity": 1000000,
+                        "max_new_capacity_init": 500000,
                         "learning_parameter":0.33,
-                        "capacity_initial":5000,
+                        "cumulative_capacity_init":1000000,
+                        "cumulative_external_capacity":2000000,
                         "can_expand": true,
+                        "de_duration": 1,
+                        "af_duration": 1,
+                        "cc_duration": 1,
                         "constraints": {
-                            "CapacityConstraint": true
+                            "CapacityConstraint": true,
+                            "MaxCapacityConstraint": true,
+                            "MaxCapacityGrowthConstraint": true,
+                            "DevelopmentConstraint": true
                         },
                         "min_capacity": 0,
                         "commodity": "Electricity",
@@ -83,13 +99,20 @@
                     "edge": {
                         "can_retire": true,
                         "max_capacity": 10000000,
-                        "max_new_capacity": 2000000,
+                        "max_new_capacity": 1000000,
+                        "max_new_capacity_init": 500000,
                         "learning_parameter":0.33,
-                        "capacity_initial":5000,
-                        "investment_cost_init": 1529678.812,
+                        "cumulative_capacity_init":1000000,
+                        "cumulative_external_capacity":2000000,
                         "can_expand": true,
+                        "de_duration": 1,
+                        "af_duration": 1,
+                        "cc_duration": 1,
                         "constraints": {
-                            "CapacityConstraint": true
+                            "CapacityConstraint": true,
+                            "MaxCapacityConstraint": true,
+                            "MaxCapacityGrowthConstraint": true,
+                            "DevelopmentConstraint": true
                         },
                         "min_capacity": 0,
                         "commodity": "Electricity",
@@ -115,13 +138,20 @@
                     "edge": {
                         "can_retire": true,
                         "max_capacity": 10000000,
-                        "max_new_capacity": 2000000,
+                        "max_new_capacity": 1000000,
+                        "max_new_capacity_init": 500000,
                         "learning_parameter":0.33,
-                        "capacity_initial":5000,
-                        "investment_cost_init": 1529678.812,
+                        "cumulative_capacity_init":1000000,
+                        "cumulative_external_capacity":2000000,
                         "can_expand": true,
+                        "de_duration": 1,
+                        "af_duration": 1,
+                        "cc_duration": 1,
                         "constraints": {
-                            "CapacityConstraint": true
+                            "CapacityConstraint": true,
+                            "MaxCapacityConstraint": true,
+                            "MaxCapacityGrowthConstraint": true,
+                            "DevelopmentConstraint": true
                         },
                         "min_capacity": 0,
                         "commodity": "Electricity",

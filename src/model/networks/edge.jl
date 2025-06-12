@@ -409,7 +409,8 @@ function planning_model!(e::AbstractEdge, model::Model)
         e.cumulative_experience = @variable(model, [k in 1:N], lower_bound = 0.0, base_name = "vCUMULCAP_$(id(e))_stage$(period_index(e))")
         
         curr_stage = period_index(e)
-        cost_stage = curr_stage - 1
+        # Delay learning
+        cost_period = curr_stage - cc_duration(e)
 
         # Set cumulative_experience as sum of existing capacity and all new capacity
         @constraint(model, sum(cumulative_experience(e)[k] for k in 1:N) == sum(new_capacity_track(e,k) for k=1:curr_stage) + cumulative_external_capacity(e))
@@ -431,18 +432,19 @@ function planning_model!(e::AbstractEdge, model::Model)
         e.learning_pwl_track[period_index(e)] = learning_pwl_slope(e)
         e.segments_sos1_track[period_index(e)] = segments_sos1(e)
         
-        # Update investment cost
-        if curr_stage == 1
+        # Determine investment cost
+        # Depends on learning lag
+        if curr_stage <= cc_duration(e)
             # e.endog_investment_cost = annualized_investment_cost(e)
             e.annualized_investment_cost_with_learning = annualized_investment_cost(e)*new_capacity(e)
             e.endog_annualized_cost = annualized_investment_cost(e)
             e.segments_sos1_prev = segments_sos1_track(e, curr_stage)
 
         else
-            # e.endog_investment_cost = learning_pwl_track(e, cost_stage)*annualization_factor(e)
+            # e.endog_investment_cost = learning_pwl_track(e, cost_period)*annualization_factor(e)
             
             # Linearize 
-            e.segments_sos1_prev = segments_sos1_track(e, cost_stage)
+            e.segments_sos1_prev = segments_sos1_track(e, cost_period)
             e.aux_new_capacity = @variable(model, [k in 1:N], lower_bound = 0.0)
             # Upper bound on new capacity in a given period
             big_M_capacity = max_new_capacity(e)
