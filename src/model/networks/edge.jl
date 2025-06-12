@@ -63,9 +63,9 @@ macro AbstractEdgeBaseAttributes()
         endog_annualized_cost::AffExpr = AffExpr(0.0)
         cumulative_external_capacity::Float64 = 0.0
         # Shadow
-        de_duration::Float64 = $edge_defaults[:de_duration]
-        af_duration::Float64 = $edge_defaults[:af_duration]
-        cc_duration::Float64 = $edge_defaults[:cc_duration]
+        de_duration::Int64 = $edge_defaults[:de_duration]
+        af_duration::Int64 = $edge_defaults[:af_duration]
+        cc_duration::Int64 = $edge_defaults[:cc_duration]
         # Definition and evaluation (DE)
         de_cost::Float64 = 0.0
         new_de_capacity::AffExpr = AffExpr(0.0)

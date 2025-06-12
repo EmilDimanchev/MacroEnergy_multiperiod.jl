@@ -41,9 +41,9 @@ macro AbstractStorageBaseAttributes()
         annualization_factor::Float64 = 0.0
         endog_annualized_cost::Float64 = 0.0
         # Shadow
-        de_duration::Float64 = $storage_defaults[:de_duration]
-        af_duration::Float64 = $storage_defaults[:af_duration]
-        cc_duration::Float64 = $storage_defaults[:cc_duration]
+        de_duration::Int64 = $storage_defaults[:de_duration]
+        af_duration::Int64 = $storage_defaults[:af_duration]
+        cc_duration::Int64 = $storage_defaults[:cc_duration]
         # Definition and evaluation (DE)
         de_cost::Float64 = 0.0
         new_de_capacity::AffExpr = AffExpr(0.0)
@@ -209,7 +209,7 @@ de_duration(g::AbstractStorage) = g.de_duration;
 af_duration(g::AbstractStorage) = g.af_duration;
 cc_duration(g::AbstractStorage) = g.cc_duration;
 # Definition and evaluation (DE)
-new_de_capacity(e::AbstractStorage) = g.new_de_capacity;
+new_de_capacity(g::AbstractStorage) = g.new_de_capacity;
 de_capacity(g::AbstractStorage) = g.de_capacity;
 new_de_capacity_track(g::AbstractStorage) = g.new_de_capacity_track;
 new_de_capacity_track(g::AbstractStorage,s::Int64) =  (haskey(new_de_capacity_track(g),s) == false) ? 0.0 : g.new_de_capacity_track[s];
@@ -217,7 +217,7 @@ de_capacity_track(g::AbstractStorage) = g.de_capacity_track;
 de_capacity_track(g::AbstractStorage,s::Int64) =  (haskey(de_capacity_track(g),s) == false) ? 0.0 : g.de_capacity_track[s];
 new_de_units(g::AbstractStorage) = g.new_de_units;
 # Approvals and funding (AF)
-new_af_capacity(e::AbstractStorage) = g.new_af_capacity;
+new_af_capacity(g::AbstractStorage) = g.new_af_capacity;
 af_capacity(g::AbstractStorage) = g.af_capacity;
 new_af_capacity_track(g::AbstractStorage) = g.new_af_capacity_track;
 new_af_capacity_track(g::AbstractStorage,s::Int64) =  (haskey(new_af_capacity_track(g),s) == false) ? 0.0 : g.new_af_capacity_track[s];
@@ -225,7 +225,7 @@ af_capacity_track(g::AbstractStorage) = g.af_capacity_track;
 af_capacity_track(g::AbstractStorage,s::Int64) =  (haskey(af_capacity_track(g),s) == false) ? 0.0 : g.af_capacity_track[s];
 new_af_units(g::AbstractStorage) = g.new_af_units;
 # Construction and commissioning (CC)
-new_cc_capacity(e::AbstractStorage) = g.new_cc_capacity;
+new_cc_capacity(g::AbstractStorage) = g.new_cc_capacity;
 cc_capacity(g::AbstractStorage) = g.cc_capacity;
 new_cc_capacity_track(g::AbstractStorage) = g.new_cc_capacity_track;
 new_cc_capacity_track(g::AbstractStorage,s::Int64) =  (haskey(new_cc_capacity_track(g),s) == false) ? 0.0 : g.new_cc_capacity_track[s];
