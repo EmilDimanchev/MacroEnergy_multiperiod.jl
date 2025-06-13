@@ -457,7 +457,8 @@ function planning_model!(e::AbstractEdge, model::Model)
             @constraint(model, [k in 1:n_segments], e.new_capacity - e.aux_new_capacity[k] <= big_M_capacity*(1-segments_sos1_prev(e)[k]))
             @constraint(model, [k in 1:n_segments], e.aux_new_capacity[k] <= big_M_capacity*e.segments_sos1_prev[k])
             e.annualized_investment_cost_with_learning = @expression(model, sum(e.pwl_cost_slopes[k]*e.aux_new_capacity[k]*annualization_factor(e) for k in 1:n_segments))
-
+            
+            # For reporting purposes
             e.endog_annualized_cost = @expression(model, sum(e.pwl_cost_slopes[k]*e.segments_sos1_prev[k]*annualization_factor(e) for k in 1:n_segments))
             # Enf of linearization
         end
