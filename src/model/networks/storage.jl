@@ -34,6 +34,8 @@ macro AbstractStorageBaseAttributes()
         storage_level::JuMPVariable = Vector{VariableRef}()
         wacc::Union{Missing,Float64} = missing
         annualized_investment_cost::Union{Nothing,Float64} = $storage_defaults[:annualized_investment_cost]
+        # Learning
+        tech_type::String = ""
         learning_parameter::Float64 = 0.0
         investment_cost_init::Float64 = 0.0
         cumulative_capacity_init::Float64 = 0.0
@@ -199,6 +201,8 @@ storage_level(g::AbstractStorage) = g.storage_level;
 storage_level(g::AbstractStorage, t::Int64) = storage_level(g)[t];
 wacc(g::AbstractStorage) = g.wacc;
 annualized_investment_cost(g::AbstractStorage) = g.annualized_investment_cost;
+# Learning
+tech_type(g::AbstractStorage) = g.tech_type;
 learning_parameter(g::AbstractStorage) = g.learning_parameter;
 investment_cost_init(g::AbstractStorage) = g.investment_cost_init;
 annuities_mult(g::AbstractStorage) = g.annuities_mult;
