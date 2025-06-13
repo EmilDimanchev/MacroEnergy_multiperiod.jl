@@ -110,8 +110,8 @@
                         "cc_duration": 1,
                         "constraints": {
                             "CapacityConstraint": true,
-                            "MaxCapacityConstraint": false,
-                            "MaxCapacityGrowthConstraint": false,
+                            "MaxCapacityConstraint": true,
+                            "MaxCapacityGrowthConstraint": true,
                             "DevelopmentConstraint": true
                         },
                         "min_capacity": 0,

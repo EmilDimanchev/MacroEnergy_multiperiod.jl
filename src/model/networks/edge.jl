@@ -386,9 +386,9 @@ function planning_model!(e::AbstractEdge, model::Model)
         end
         
         
-        tech_ids, tech_edges = get_tech_ids(system, tech_type(e))
-        println("edges")
-        println(tech_edges)
+        # tech_ids, tech_edges = get_tech_ids(system, tech_type(e))
+        # println("edges")
+        # println(tech_edges)
 
         # Number of segments
         N = 5
@@ -418,7 +418,8 @@ function planning_model!(e::AbstractEdge, model::Model)
         cost_period = curr_stage - cc_duration(e)
 
         # Set cumulative_experience as sum of existing capacity and all new capacity
-        @constraint(model, sum(cumulative_experience(e)[k] for k in 1:N) == sum(new_capacity_track(e,k) for k=1:curr_stage, e in tech_edges) + cumulative_external_capacity(e))
+        # @constraint(model, sum(cumulative_experience(e)[k] for k in 1:N) == sum(new_capacity_track(e,k) for k=1:curr_stage, e in tech_edges) + cumulative_external_capacity(e))
+        @constraint(model, sum(cumulative_experience(e)[k] for k in 1:N) == sum(new_capacity_track(e,k) for k=1:curr_stage) + cumulative_external_capacity(e))
 
         # Constraints ensuring segments_sos1 is chosen based on capacity decision
         @constraint(model, [k in 1:N], cumulative_experience(e)[k] >= x_points[k]*segments_sos1(e)[k])
