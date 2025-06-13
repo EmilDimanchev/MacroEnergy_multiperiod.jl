@@ -418,7 +418,6 @@ function planning_model!(e::AbstractEdge, model::Model)
         cost_period = curr_stage - cc_duration(e)
 
         # Set cumulative_experience as sum of existing capacity and all new capacity
-        # @constraint(model, sum(cumulative_experience(e)[k] for k in 1:N) == sum(new_capacity_track(e,k) for k=1:curr_stage, e in tech_edges) + cumulative_external_capacity(e))
         @constraint(model, sum(cumulative_experience(e)[k] for k in 1:N) == sum(new_capacity_track(e,k) for k=1:curr_stage) + cumulative_external_capacity(e))
 
         # Constraints ensuring segments_sos1 is chosen based on capacity decision
