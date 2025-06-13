@@ -57,7 +57,7 @@ macro AbstractEdgeBaseAttributes()
         cumulative_experience::Union{JuMPVariable,Float64} = 0.0
         learning_pwl_slope::AffExpr = AffExpr(0.0)
         learning_pwl_track::Dict{Int64,AffExpr} = Dict(1=>AffExpr(0.0))
-        pwl_cost_slopes::JuMPVariable = Vector{VariableRef}()
+        pwl_cost_slopes::Vector{Float64} = Float64[]
         annualized_investment_cost_with_learning::AffExpr = AffExpr(0.0)
         annuities_mult::Float64 = 0.0
         annualization_factor::Float64 = 0.0
