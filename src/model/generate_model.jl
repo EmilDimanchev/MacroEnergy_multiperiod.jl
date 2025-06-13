@@ -33,11 +33,11 @@ function generate_model(case::Case)
         @info(" -- Defining available capacity")
         define_available_capacity!(system, model)
 
-        @info(" -- Defining any technological learning expressions")
-        technology_learning!(system, model)
-
         @info(" -- Generating planning model")
         planning_model!(system, model)
+
+        @info(" -- Add any technological learning")
+        add_learning!(system, model)
 
         @info(" -- Including age-based retirements")
         add_age_based_retirements!.(system.assets, model)

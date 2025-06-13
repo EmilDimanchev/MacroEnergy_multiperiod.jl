@@ -1,5 +1,6 @@
-function technology_learning!(system::System, model::Model)
+function add_learning!(system::System, model::Model)
     
+    # Need all edges to define learning across all edges of a certain type
     edges = get_edges(system)
 
     for e in edges
@@ -10,9 +11,8 @@ function technology_learning!(system::System, model::Model)
                 error("Maximum capacity not specified for learning technology")
             end
             
+            # Need all edges of that technology
             tech_ids, tech_edges = get_tech_ids(system, tech_type(e))
-            println("edges")
-            println(tech_edges)
 
             # Number of segments
             N = 5
@@ -97,12 +97,12 @@ function technology_learning!(system::System, model::Model)
 end
 
 
-function get_tech_ids(system::System, tech_type::String)
+function get_tech_ids(system::System, type::String)
     tech_ids = Vector{Symbol}()
     tech_edges = Dict{Symbol,Vector{AbstractEdge}}()
     edges = get_edges(system)
     for e in edges 
-        if tech_type(e) == tech_type
+        if tech_type(e) == type
             push!(tech_ids, id(e))
             if !haskey(tech_edges, id(e))
                 tech_edges[id(e)] = [e]
