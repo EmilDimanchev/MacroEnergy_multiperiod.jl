@@ -50,18 +50,21 @@ function add_learning!(system::System, model::Model)
             # Delay learning
             cost_period = curr_stage - cc_duration(e)
     
-            # Set cumulative_experience as sum of existing capacity and all new capacity
-            @constraint(model, sum(cumulative_experience(e)[k] for k in 1:n_segments) == sum(new_capacity_track(e,k) for k=1:curr_stage) + cumulative_external_capacity(e))
+            # Need learning from all edges of that type. Cumulative_experience combines existing capacity and all new capacity
+            tech_ids, tech_edges = get_tech_ids(system, tech_type(e))
+            println(tech_ids)
+
+            @constraint(model, sum(cumulative_experience(e)[k] for k in 1:n_segments) == sum(new_capacity_track(e,k) for k=1:curr_stage, e in tech_edges) + cumulative_external_capacity(e))
     
             # Constraints ensuring segments_sos1 is chosen based on capacity decision
             @constraint(model, [k in 1:n_segments], cumulative_experience(e)[k] >= x_points[k]*segments_sos1(e)[k])
     
             @constraint(model, [k in 1:n_segments], cumulative_experience(e)[k] <= x_points[k+1]*segments_sos1(e)[k])
-            println("points")
-            println(x_points)
-            println(y_points)
-            println("All slopes")
-            println(e.pwl_cost_slopes)
+            # println("points")
+            # println(x_points)
+            # println(y_points)
+            # println("All slopes")
+            # println(e.pwl_cost_slopes)
             # Slope reached after building new capacity
             e.learning_pwl_slope = @expression(model, sum(segments_sos1(e)[k] * pwl_cost_slopes(e)[k] for k in 1:n_segments))
             e.learning_pwl_track[period_index(e)] = learning_pwl_slope(e)
