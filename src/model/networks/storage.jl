@@ -35,7 +35,8 @@ macro AbstractStorageBaseAttributes()
         wacc::Union{Missing,Float64} = missing
         annualized_investment_cost::Union{Nothing,Float64} = $storage_defaults[:annualized_investment_cost]
         # Learning
-        tech_type::String = ""
+        learning_type::String = ""
+        n_learning_pwl_segments::Int64 = $storage_defaults[:n_learning_pwl_segments]
         learning_parameter::Float64 = 0.0
         investment_cost_init::Float64 = 0.0
         cumulative_capacity_init::Float64 = 0.0
@@ -202,7 +203,8 @@ storage_level(g::AbstractStorage, t::Int64) = storage_level(g)[t];
 wacc(g::AbstractStorage) = g.wacc;
 annualized_investment_cost(g::AbstractStorage) = g.annualized_investment_cost;
 # Learning
-tech_type(g::AbstractStorage) = g.tech_type;
+learning_type(g::AbstractStorage) = g.learning_type;
+n_learning_pwl_segments(g::AbstractStorage) = g.n_learning_pwl_segments;
 learning_parameter(g::AbstractStorage) = g.learning_parameter;
 investment_cost_init(g::AbstractStorage) = g.investment_cost_init;
 annuities_mult(g::AbstractStorage) = g.annuities_mult;

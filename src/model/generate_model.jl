@@ -33,7 +33,7 @@ function generate_model(case::Case)
         @info(" -- Defining available capacity")
         define_available_capacity!(system, model)
 
-        @info(" -- Add any technological learning")
+        @info(" -- Add any endogenous technological learning")
         add_learning!(system, model)
 
         @info(" -- Generating planning model")
