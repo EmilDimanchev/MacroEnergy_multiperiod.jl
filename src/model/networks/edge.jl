@@ -444,9 +444,9 @@ function planning_model!(e::AbstractEdge, model::Model)
         if curr_stage <= cc_duration(e)
             # e.endog_investment_cost = annualized_investment_cost(e)
             e.annualized_investment_cost_with_learning = annualized_investment_cost(e)*new_capacity(e)
-            e.endog_annualized_cost = annualized_investment_cost(e)
             e.segments_sos1_prev = segments_sos1_track(e, curr_stage)
-
+            # For reporting purposes
+            e.endog_annualized_cost = annualized_investment_cost(e)
         else
             # e.endog_investment_cost = learning_pwl_track(e, cost_period)*annualization_factor(e)
             
@@ -466,6 +466,7 @@ function planning_model!(e::AbstractEdge, model::Model)
             # Enf of linearization
         end
     else
+        # For reporting purposes
         e.endog_annualized_cost = annualized_investment_cost(e)
         # e.endog_investment_cost = annualized_investment_cost(e)
     end
