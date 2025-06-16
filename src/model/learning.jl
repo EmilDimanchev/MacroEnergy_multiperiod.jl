@@ -7,6 +7,7 @@ function add_learning!(system::System, model::Model)
         
         # Endogenous learning MARK: Learning
         if learning_parameter(e) != 0.0
+            println(e.id)
             # Check if we have maximum capacity
             if max_capacity(e) == Inf
                 error("Maximum capacity not specified for learning technology")
@@ -56,11 +57,11 @@ function add_learning!(system::System, model::Model)
             @constraint(model, [k in 1:n_segments], cumulative_experience(e)[k] >= x_points[k]*segments_sos1(e)[k])
     
             @constraint(model, [k in 1:n_segments], cumulative_experience(e)[k] <= x_points[k+1]*segments_sos1(e)[k])
-            println("points")
-            println(x_points)
-            println(y_points)
-            println("All slopes")
-            println(e.pwl_cost_slopes)
+            # println("points")
+            # println(x_points)
+            # println(y_points)
+            # println("All slopes")
+            # println(e.pwl_cost_slopes)
             # Slope reached after building new capacity
             e.learning_pwl_slope = @expression(model, sum(segments_sos1(e)[k] * pwl_cost_slopes(e)[k] for k in 1:n_segments))
             e.learning_pwl_track[period_index(e)] = learning_pwl_slope(e)
@@ -71,9 +72,9 @@ function add_learning!(system::System, model::Model)
             if curr_stage <= cc_duration(e)
                 # e.endog_investment_cost = annualized_investment_cost(e)
                 e.annualized_investment_cost_with_learning = annualized_investment_cost(e)*new_capacity(e)
-                e.endog_annualized_cost = annualized_investment_cost(e)
                 e.segments_sos1_prev = segments_sos1_track(e, curr_stage)
-    
+                # For reporting purposes
+                e.endog_annualized_cost = annualized_investment_cost(e)
             else
                 # e.endog_investment_cost = learning_pwl_track(e, cost_period)*annualization_factor(e)
                 
@@ -93,6 +94,7 @@ function add_learning!(system::System, model::Model)
                 # Enf of linearization
             end
         else
+            # For reporting purposes
             e.endog_annualized_cost = annualized_investment_cost(e)
             # e.endog_investment_cost = annualized_investment_cost(e)
         end

@@ -378,7 +378,7 @@ end
 
 function planning_model!(e::AbstractEdge, model::Model)
 
-    e.annualized_investment_cost = investment_cost(e)*annualization_factor(e)
+    # e.annualized_investment_cost = investment_cost(e)*annualization_factor(e)
 
     # # Endogenous learning MARK: Learning
     # if learning_parameter(e) != 0.0
