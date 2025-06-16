@@ -27,6 +27,8 @@ function add_learning!(system::System, model::Model)
             # Define (x,y) coordinates for piece-wise linear curve (cumulative cost as a function of cumulative capacity added)
             x_points = zeros(n_segments+1)
             y_points = zeros(n_segments+1)
+            
+            
             # Compute coordinates
             for k in 1:n_segments+1
                 if k == 1
@@ -38,7 +40,10 @@ function add_learning!(system::System, model::Model)
                 cost_point = investment_cost(e)*(x_points[k]/cumulative_capacity_init(e))^(-learning_parameter(e))
                 # Estimate cost from fixed capacity points
                 y_points[k] = (1/(1-learning_parameter(e)))*(x_points[k]*cost_point-investment_cost(e)*cumulative_capacity_init(e))
+
+                
             end
+
             # Compute slopes of piece-wise linear curve
             # First segment represents no new capacity and no learning
             push!(e.pwl_cost_slopes, investment_cost(e))
@@ -63,11 +68,18 @@ function add_learning!(system::System, model::Model)
             tech_edges = get_edges_of_type(system, learning_type(e))
 
             @constraint(model, sum(cumulative_experience(e)[k] for k in 1:n_segments) == sum(new_capacity_track(e,k) for k=1:curr_period, e in tech_edges) + cumulative_external_capacity(e))
-    
-            # Constraints ensuring segments_sos1 is chosen based on capacity decision
+            
+            # Determine chosen segment
+            # Ensure strict inequality for all but the first segment since first segment represents no learning
+            epsilon_learning = 1
+            for k in 2:length(x_points)
+                x_points[k] += epsilon_learning
+            end
+            # epsilon_learning = ones(length(x_points))*1
+            # epsilon_learning[1] = 0
             @constraint(model, [k in 1:n_segments], cumulative_experience(e)[k] >= x_points[k]*segments_sos1(e)[k])
-    
-            @constraint(model, [k in 1:n_segments], cumulative_experience(e)[k] <= x_points[k+1]*segments_sos1(e)[k])
+            @constraint(model, [k in 1:n_segments], cumulative_experience(e)[k] <= x_points[k+1]*segments_sos1(e)[k] - epsilon_learning)
+
             println(string(e.id," points"))
             println(x_points)
             println(y_points)
