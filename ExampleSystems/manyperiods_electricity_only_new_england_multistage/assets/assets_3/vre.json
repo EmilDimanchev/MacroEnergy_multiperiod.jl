@@ -19,7 +19,8 @@
                 "id": "MA_solar_pv",
                 "edges": {
                     "edge": {
-                        "tech_type": "solar",
+                        "learning_type": "solar",
+                        "n_learning_pwl_segments": 6,
                         "can_retire": true,
                         "max_capacity": 10000000,
                         "max_new_capacity": 1000000,
@@ -59,7 +60,8 @@
                 "id": "CT_onshore_wind",
                 "edges": {
                     "edge": {
-                        "tech_type": "wind",
+                        "learning_type": "wind",
+                        "n_learning_pwl_segments": 6,
                         "can_retire": true,
                         "max_capacity": 10000000,
                         "max_new_capacity": 1000000,
@@ -99,7 +101,8 @@
                 "id": "CT_solar_pv",
                 "edges": {
                     "edge": {
-                        "tech_type": "solar",
+                        "learning_type": "solar",
+                        "n_learning_pwl_segments": 6,
                         "can_retire": true,
                         "max_capacity": 10000000,
                         "max_new_capacity": 1000000,
@@ -139,7 +142,8 @@
                 "id": "ME_onshore_wind",
                 "edges": {
                     "edge": {
-                        "tech_type": "wind",
+                        "learning_type": "wind",
+                        "n_learning_pwl_segments": 6,
                         "can_retire": true,
                         "max_capacity": 10000000,
                         "max_new_capacity": 1000000,

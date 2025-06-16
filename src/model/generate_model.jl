@@ -33,6 +33,9 @@ function generate_model(case::Case)
         @info(" -- Defining available capacity")
         define_available_capacity!(system, model)
 
+        @info(" -- Add any endogenous technological learning")
+        add_learning!(system, model)
+
         @info(" -- Generating planning model")
         planning_model!(system, model)
 
@@ -90,6 +93,7 @@ function generate_model(case::Case)
     return model
     
 end
+
 
 function planning_model!(system::System, model::Model)
 
@@ -284,6 +288,7 @@ function compute_annualized_costs!(y::Union{AbstractEdge,AbstractStorage},settin
             y.wacc = settings.DiscountRate;
         end
         y.annualization_factor = wacc(y)>0 ? wacc(y) / (1 - (1 + wacc(y))^-capital_recovery_period(y))  : 1.0
+        y.annualized_investment_cost = investment_cost(y)*annualization_factor(y)
         # y.annualized_investment_cost = investment_cost(y) * annualization_factor;
         # y.annualized_investment_cost = investment_cost(y) * annualization_factor;
     end

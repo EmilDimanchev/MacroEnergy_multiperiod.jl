@@ -41,7 +41,8 @@ function edge_default_data()
         :annualized_investment_cost => nothing,
         :de_duration => 1,
         :af_duration => 1,
-        :cc_duration => 1
+        :cc_duration => 1,
+        :n_learning_pwl_segments => 0
     )
 end
 
@@ -89,7 +90,8 @@ function storage_default_data()
         :annualized_investment_cost => nothing,
         :de_duration => 1,
         :af_duration => 1,
-        :cc_duration => 1
+        :cc_duration => 1,
+        :n_learning_pwl_segments => 0
     )
 end
 
