@@ -38,7 +38,6 @@ macro AbstractStorageBaseAttributes()
         learning_type::String = ""
         n_learning_pwl_segments::Int64 = $storage_defaults[:n_learning_pwl_segments]
         learning_parameter::Float64 = 0.0
-        investment_cost_init::Float64 = 0.0
         cumulative_capacity_init::Float64 = 0.0
         annuities_mult::Float64 = 0.0
         annualization_factor::Float64 = 0.0
@@ -206,7 +205,6 @@ annualized_investment_cost(g::AbstractStorage) = g.annualized_investment_cost;
 learning_type(g::AbstractStorage) = g.learning_type;
 n_learning_pwl_segments(g::AbstractStorage) = g.n_learning_pwl_segments;
 learning_parameter(g::AbstractStorage) = g.learning_parameter;
-investment_cost_init(g::AbstractStorage) = g.investment_cost_init;
 annuities_mult(g::AbstractStorage) = g.annuities_mult;
 annualization_factor(g::AbstractStorage) = g.annualization_factor;
 endog_annualized_cost(g::AbstractStorage) = g.endog_annualized_cost;

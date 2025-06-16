@@ -50,7 +50,6 @@ macro AbstractEdgeBaseAttributes()
         learning_type::String = ""
         learning_parameter::Float64 = 0.0
         cumulative_capacity_init::Float64 = 0.0
-        investment_cost_init::Float64 = 0.0
         segments_sos1::JuMPVariable = Vector{VariableRef}()
         segments_sos1_track::Dict{Int64,Union{JuMPVariable}} = Dict(1 => Vector{VariableRef}())
         segments_sos1_prev::Union{JuMPVariable,Float64} = Vector{VariableRef}()
@@ -233,7 +232,6 @@ has_capacity(e::AbstractEdge) = e.has_capacity;
 id(e::AbstractEdge) = e.id;
 integer_decisions(e::AbstractEdge) = e.integer_decisions;
 investment_cost(e::AbstractEdge) = e.investment_cost;
-investment_cost_init(e::AbstractEdge) = e.investment_cost_init;
 lifetime(e::AbstractEdge) = e.lifetime;
 loss_fraction(e::AbstractEdge) = e.loss_fraction;
 function loss_fraction(e::AbstractEdge, t::Int64)
