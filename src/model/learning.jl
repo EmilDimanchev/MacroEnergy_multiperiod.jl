@@ -14,18 +14,19 @@ function add_learning!(system::System, model::Model)
     
             # Number of segments
             n_segments = 6
+            segment_length = (max_capacity(e)-cumulative_capacity_init(e))/n_segments
             # Define exogenous points describing the piece-wise linear curve (cumulative cost as a function of cumulative capacity added)
-            x_points = zeros(n_segments+2)
-            y_points = zeros(n_segments+2)
+            x_points = zeros(n_segments+1)
+            y_points = zeros(n_segments+1)
             # First segment represents no new capacity and no learning
-            x_points[1] = cumulative_capacity_init(e)
-            
             push!(e.pwl_cost_slopes, investment_cost(e))
-
             # Define points
             for k in 1:n_segments+1
-                segment_length = (max_capacity(e)-cumulative_capacity_init(e))/n_segments
-                x_points[k+1] = (k-1)*(segment_length)+cumulative_capacity_init(e)
+                if k == 1
+                    x_points[k] = cumulative_capacity_init(e)
+                elseif k >= 2
+                    x_points[k] = (k-2)*(segment_length)+cumulative_capacity_init(e)
+                end
                 cost_point = investment_cost(e)*(x_points[k]/cumulative_capacity_init(e))^(-learning_parameter(e))
                 # Estimate cost from fixed capacity points
                 y_points[k] = (1/(1-learning_parameter(e)))*(x_points[k]*cost_point-investment_cost(e)*cumulative_capacity_init(e))
