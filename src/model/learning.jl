@@ -74,11 +74,12 @@ function add_learning!(system::System, model::Model)
             @constraint(model, [k in 1:n_segments], cumulative_experience(e)[k] >= (x_points[k] + ϵ[k]) * segments_sos1(e)[k])
             @constraint(model, [k in 1:n_segments], cumulative_experience(e)[k] <= x_points[k+1] * segments_sos1(e)[k])
 
-            println(string(e.id," points"))
-            println(x_points)
-            println(y_points)
-            println("All slopes")
-            println(e.pwl_cost_slopes)
+            # println(string(e.id," points"))
+            # println(x_points)
+            # println(y_points)
+            # println("All slopes")
+            # println(e.pwl_cost_slopes)
+            
             # Slope reached after building new capacity
             e.learning_pwl_slope = @expression(model, sum(segments_sos1(e)[k] * pwl_cost_slopes(e)[k] for k in 1:n_segments))
             e.learning_pwl_track[period_index(e)] = learning_pwl_slope(e)
@@ -96,7 +97,7 @@ function add_learning!(system::System, model::Model)
             else
                 # Linearize 
                 e.segments_sos1_prev = segments_sos1_track(e, cost_period)
-                e.aux_new_capacity = @variable(model, [k in 1:n_segments], lower_bound = 0.0)
+                e.aux_new_capacity = @variable(model, [k in 1:n_segments], lower_bound = 0.0, base_name = "vAUXNEWCAP_$(id(e))_stage$(period_index(e))_seg_$k")
                 # Upper bound on new capacity in a given period
                 big_M_capacity = max_new_capacity(e)
                 @constraint(model, [k in 1:n_segments], e.new_capacity - e.aux_new_capacity[k] >= 0)

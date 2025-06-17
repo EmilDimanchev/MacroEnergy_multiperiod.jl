@@ -19,8 +19,6 @@ macro AbstractEdgeBaseAttributes()
         has_capacity::Bool = $edge_defaults[:has_capacity]
         integer_decisions::Bool = $edge_defaults[:integer_decisions]
         investment_cost::Float64 = $edge_defaults[:investment_cost]
-        # Endogenous investment cost
-        endog_investment_cost::AffExpr = 0.0
         lifetime::Int64 = $edge_defaults[:lifetime]
         loss_fraction::Vector{Float64} = $edge_defaults[:loss_fraction]
         max_capacity::Float64 = $edge_defaults[:max_capacity]
@@ -63,6 +61,7 @@ macro AbstractEdgeBaseAttributes()
         annualization_factor::Float64 = 0.0
         endog_annualized_cost::AffExpr = AffExpr(0.0)
         cumulative_external_capacity::Float64 = 0.0
+        endog_investment_cost::AffExpr = 0.0
         # Shadow
         de_duration::Int64 = $edge_defaults[:de_duration]
         af_duration::Int64 = $edge_defaults[:af_duration]
