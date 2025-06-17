@@ -28,20 +28,18 @@ function add_learning!(system::System, model::Model)
             x_points = zeros(n_segments+1)
             y_points = zeros(n_segments+1)
             
-            
             # Compute coordinates
             for k in 1:n_segments+1
                 if k == 1
-                    x_points[k] = cumulative_capacity_init(e)
+                    x_points[k] = 0
+                    y_points[k] = 0
                 elseif k >= 2
                     x_points[k] = (k-2)*(segment_length)+cumulative_capacity_init(e)
-                end
-                # Estimate per-unit CAPEX cost for a given cumulative capacity 
+                    # Estimate per-unit CAPEX cost for a given cumulative capacity 
                 cost_point = investment_cost(e)*(x_points[k]/cumulative_capacity_init(e))^(-learning_parameter(e))
                 # Estimate cost from fixed capacity points
                 y_points[k] = (1/(1-learning_parameter(e)))*(x_points[k]*cost_point-investment_cost(e)*cumulative_capacity_init(e))
-
-                
+                end
             end
 
             # Compute slopes of piece-wise linear curve
@@ -64,21 +62,17 @@ function add_learning!(system::System, model::Model)
             curr_period = period_index(e)
             cost_period = curr_period - cc_duration(e)
     
-            # Need learning from all edges of that type. Cumulative_experience combines existing capacity and all new capacity
+            # Learning from all edges of that type. 
             tech_edges = get_edges_of_type(system, learning_type(e))
-
+            # Cumulative_experience combines existing capacity and all new capacity from modeled region and externally
             @constraint(model, sum(cumulative_experience(e)[k] for k in 1:n_segments) == sum(new_capacity_track(e,k) for k=1:curr_period, e in tech_edges) + cumulative_external_capacity(e))
             
             # Determine chosen segment
-            # Ensure strict inequality for all but the first segment since first segment represents no learning
-            epsilon_learning = 1
-            for k in 2:length(x_points)
-                x_points[k] += epsilon_learning
-            end
-            # epsilon_learning = ones(length(x_points))*1
-            # epsilon_learning[1] = 0
-            @constraint(model, [k in 1:n_segments], cumulative_experience(e)[k] >= x_points[k]*segments_sos1(e)[k])
-            @constraint(model, [k in 1:n_segments], cumulative_experience(e)[k] <= x_points[k+1]*segments_sos1(e)[k] - epsilon_learning)
+            # Ensure strict inequality
+            epsilon_learning = cumulative_capacity_init(e)/1e6
+            ϵ = ones(length(x_points))*epsilon_learning
+            @constraint(model, [k in 1:n_segments], cumulative_experience(e)[k] >= (x_points[k] + ϵ[k]) * segments_sos1(e)[k])
+            @constraint(model, [k in 1:n_segments], cumulative_experience(e)[k] <= x_points[k+1] * segments_sos1(e)[k])
 
             println(string(e.id," points"))
             println(x_points)
