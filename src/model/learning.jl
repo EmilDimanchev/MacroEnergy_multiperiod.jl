@@ -100,7 +100,9 @@ function add_learning!(system::System, model::Model)
                 e.aux_new_capacity = @variable(model, [k in 1:n_segments], lower_bound = 0.0, base_name = "vAUXNEWCAP_$(id(e))_stage$(period_index(e))_seg_$k")
                 # Upper bound on new capacity in a given period
                 big_M_capacity = max_new_capacity(e)
+
                 @constraint(model, [k in 1:n_segments], e.new_capacity - e.aux_new_capacity[k] >= 0)
+                # Big M constraints
                 @constraint(model, [k in 1:n_segments], e.new_capacity - e.aux_new_capacity[k] <= big_M_capacity*(1-segments_sos1_prev(e)[k]))
                 @constraint(model, [k in 1:n_segments], e.aux_new_capacity[k] <= big_M_capacity*e.segments_sos1_prev[k])
                 e.annualized_investment_cost_with_learning = @expression(model, sum(e.pwl_cost_slopes[k]*e.aux_new_capacity[k]*annualization_factor(e) for k in 1:n_segments))
