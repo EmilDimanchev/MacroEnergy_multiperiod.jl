@@ -37,9 +37,10 @@ function add_learning!(system::System, model::Model)
                 y_points[k] = (1/(1-learning_parameter(e)))*(x_points[k]*cost_point-investment_cost(e)*cumulative_capacity_init(e))
             end
 
-            # Compute slopes of piece-wise linear curve
+            # Slope computation for piece-wise linear curve
             # First segment represents no new capacity and no learning
             push!(e.pwl_cost_slopes, investment_cost(e))
+            # Remaining segments:
             for k in 2:n_segments+1
                 push!(e.pwl_cost_slopes, (y_points[k] - y_points[k-1])/(x_points[k]-x_points[k-1]))
             end
