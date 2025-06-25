@@ -410,18 +410,18 @@ function compute_investment_costs!(e::AbstractEdge, model::Model)
         if can_expand(e)
             
             # Linearized learning
-            if learning_parameter(e) != 0.0
-                model[:eInvestmentFixedCost] += e.annualized_investment_cost_with_learning*annuities_mult(e)
-            else
-                # Non learning
-                add_to_expression!(
-                model[:eInvestmentFixedCost],
-                annualized_investment_cost(e)*annuities_mult(e),
-                new_capacity(e),
-            )
-            end
+            # if learning_parameter(e) != 0.0
+            #     model[:eInvestmentFixedCost] += e.annualized_investment_cost_with_learning*annuities_mult(e)
+            # else
+            #     # Non learning
+            #     add_to_expression!(
+            #     model[:eInvestmentFixedCost],
+            #     annualized_investment_cost(e)*annuities_mult(e),
+            #     new_capacity(e),
+            # )
+            # end
             # Nonlinear version for benchmarking
-            # model[:eInvestmentFixedCost] += endog_investment_cost(e)*new_capacity(e)
+            model[:eInvestmentFixedCost] += endog_investment_cost(e)*annuities_mult(e)*new_capacity(e)
 
             # Shadow capacity for project development constraints
             add_to_expression!(

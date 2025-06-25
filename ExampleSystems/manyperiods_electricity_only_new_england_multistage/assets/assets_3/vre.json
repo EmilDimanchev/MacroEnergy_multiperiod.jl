@@ -26,7 +26,7 @@
                         "cumulative_capacity_init":3000000,
                         "max_new_capacity": 1000000,
                         "max_new_capacity_init": 500000,
-                        "learning_parameter":0.33,
+                        "learning_parameter":0.0,
                         "cumulative_external_capacity":3000000,
                         "can_expand": true,
                         "de_duration": 1,
@@ -35,8 +35,8 @@
                         "constraints": {
                             "CapacityConstraint": true,
                             "MaxCapacityConstraint": true,
-                            "MaxCapacityGrowthConstraint": true,
-                            "DevelopmentConstraint": true
+                            "MaxCapacityGrowthConstraint": false,
+                            "DevelopmentConstraint": false
                         },
                         "min_capacity": 0,
                         "commodity": "Electricity",
@@ -67,7 +67,7 @@
                         "cumulative_capacity_init":3000000,
                         "max_new_capacity": 1000000,
                         "max_new_capacity_init": 500000,
-                        "learning_parameter":0.33,
+                        "learning_parameter":0.0,
                         "cumulative_external_capacity":3000000,
                         "can_expand": true,
                         "de_duration": 1,
@@ -76,8 +76,8 @@
                         "constraints": {
                             "CapacityConstraint": true,
                             "MaxCapacityConstraint": true,
-                            "MaxCapacityGrowthConstraint": true,
-                            "DevelopmentConstraint": true
+                            "MaxCapacityGrowthConstraint": false,
+                            "DevelopmentConstraint": false
                         },
                         "min_capacity": 0,
                         "commodity": "Electricity",
@@ -108,7 +108,7 @@
                         "cumulative_capacity_init":3000000,
                         "max_new_capacity": 1000000,
                         "max_new_capacity_init": 500000,
-                        "learning_parameter":0.33,
+                        "learning_parameter":0.0,
                         "cumulative_external_capacity":3000000,
                         "can_expand": true,
                         "de_duration": 1,
@@ -117,8 +117,8 @@
                         "constraints": {
                             "CapacityConstraint": true,
                             "MaxCapacityConstraint": true,
-                            "MaxCapacityGrowthConstraint": true,
-                            "DevelopmentConstraint": true
+                            "MaxCapacityGrowthConstraint": false,
+                            "DevelopmentConstraint": false
                         },
                         "min_capacity": 0,
                         "commodity": "Electricity",
@@ -149,7 +149,7 @@
                         "cumulative_capacity_init":3000000,
                         "max_new_capacity": 1000000,
                         "max_new_capacity_init": 500000,
-                        "learning_parameter":0.33,
+                        "learning_parameter":0.0,
                         "cumulative_external_capacity":3000000,
                         "can_expand": true,
                         "de_duration": 1,
@@ -158,8 +158,8 @@
                         "constraints": {
                             "CapacityConstraint": true,
                             "MaxCapacityConstraint": true,
-                            "MaxCapacityGrowthConstraint": true,
-                            "DevelopmentConstraint": true
+                            "MaxCapacityGrowthConstraint": false,
+                            "DevelopmentConstraint": false
                         },
                         "min_capacity": 0,
                         "commodity": "Electricity",
