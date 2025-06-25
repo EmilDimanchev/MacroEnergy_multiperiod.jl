@@ -1,8 +1,8 @@
 case = dirname(@__FILE__);
 
 import Pkg
-Pkg.instantiate()
-println("Activating Package")
+# Pkg.instantiate()
+# println("Activating Package")
 
 Pkg.activate("/home/ed0400/1_Macro")
 
