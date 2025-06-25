@@ -46,11 +46,12 @@ function add_learning!(system::System, model::Model)
             end
             
             # SOS1 variables for piece-wise linearization
-            e.segments_sos1 = @variable(model, [k in 1:n_segments+1], lower_bound = 0.0, base_name = "vSOS1SEG_$(id(e))_stage$(period_index(e))_seg_$k")
-            @constraint(model, [k in 1:n_segments+1], segments_sos1(e)[k] <= 1)
+            # e.segments_sos1 = @variable(model, [k in 1:n_segments+1], lower_bound = 0.0, base_name = "vSOS1SEG_$(id(e))_stage$(period_index(e))_seg_$k")
+            e.segments_sos1 = @variable(model, [k in 1:n_segments+1], binary=true, base_name = "vSOS1SEG_$(id(e))_stage$(period_index(e))_seg_$k")
+            # @constraint(model, [k in 1:n_segments+1], segments_sos1(e)[k] <= 1)
             @constraint(model, sum(segments_sos1(e)[k] for k in 1:n_segments+1) == 1)
             # SOS1 constraint ensuring only one value is nonzero
-            @constraint(model, segments_sos1(e) in SOS1())
+            # @constraint(model, segments_sos1(e) in SOS1())
             # Cumulative experience for estimating movement along the learning curve 
             e.cumulative_experience = @variable(model, [k in 1:n_segments+1], lower_bound = 0.0, base_name = "vCUMULCAP_$(id(e))_stage$(period_index(e))")
             

@@ -4,8 +4,7 @@ function run_case(
     # Monolithic or Myopic
     optimizer::DataType=HiGHS.Optimizer,
     optimizer_env::Any=missing,
-    # optimizer_attributes::Tuple=("BarConvTol" => 1e-3, "Crossover" => 0, "Method" => 2),
-    optimizer_attributes::Tuple=("PreSOS1BigM" => 0),
+    optimizer_attributes::Tuple=("BarConvTol" => 1e-3, "Crossover" => 0, "Method" => 2),
     # Benders
     planning_optimizer::DataType=Gurobi.Optimizer,
     subproblem_optimizer::DataType=Gurobi.Optimizer,
