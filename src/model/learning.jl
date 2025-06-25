@@ -93,7 +93,7 @@ function add_learning!(system::System, model::Model)
                 # For reporting purposes
                 e.endog_annualized_cost = annualized_investment_cost(e)
                 # Nonlinear version for benchmarking
-                e.endog_investment_cost = annualized_investment_cost(e)
+                # e.endog_investment_cost = annualized_investment_cost(e)
             else
                 # Linearize 
                 e.segments_sos1_prev = segments_sos1_track(e, cost_period)
@@ -110,13 +110,13 @@ function add_learning!(system::System, model::Model)
                 e.endog_annualized_cost = @expression(model, sum(e.pwl_cost_slopes[k]*e.segments_sos1_prev[k]*annualization_factor(e) for k in 1:n_segments))
                 ### Enf of linearization
                 # Nonlinear version for benchmarking
-                e.endog_investment_cost = learning_pwl_track(e, cost_period)*annualization_factor(e)
+                # e.endog_investment_cost = learning_pwl_track(e, cost_period)*annualization_factor(e)
             end
         else
             # For reporting purposes
             e.endog_annualized_cost = annualized_investment_cost(e)
             # Nonlinear version for benchmarking
-            e.endog_investment_cost = annualized_investment_cost(e)
+            # e.endog_investment_cost = annualized_investment_cost(e)
         end
     end
     return nothing
