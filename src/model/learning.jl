@@ -68,7 +68,7 @@ function add_learning!(system::System, model::Model)
             # Ensure strict inequality
             epsilon_learning = cumulative_capacity_init(e)/1e6
             ϵ = ones(length(x_points))*epsilon_learning
-            @constraint(model, [k in 2:n_segments+1], cumulative_experience(e)[k] >= (x_points[k-1] + ϵ[k]) * segments_sos1(e)[k])
+            @constraint(model, [k in 2:n_segments+1], cumulative_experience(e)[k] >= (x_points[k-1] + ϵ[k-1]) * segments_sos1(e)[k])
             @constraint(model, [k in 1:n_segments+1], cumulative_experience(e)[k] <= x_points[k] * segments_sos1(e)[k])
 
             # println(string(e.id," points"))
@@ -92,8 +92,8 @@ function add_learning!(system::System, model::Model)
                 # Nonlinear version for benchmarking
                 # e.endog_investment_cost = annualized_investment_cost(e)
             else
-                # Linearize 
                 e.segments_sos1_prev = segments_sos1_track(e, cost_period)
+                # Linearize 
                 e.aux_new_capacity = @variable(model, [k in 1:n_segments+1], lower_bound = 0.0, base_name = "vAUXNEWCAP_$(id(e))_stage$(period_index(e))_seg_$k")
                 # Upper bound on new capacity in a given period
                 big_M_capacity = max_new_capacity(e)
@@ -103,9 +103,9 @@ function add_learning!(system::System, model::Model)
                 @constraint(model, [k in 1:n_segments+1], e.new_capacity - e.aux_new_capacity[k] <= big_M_capacity*(1-segments_sos1_prev(e)[k]))
                 @constraint(model, [k in 1:n_segments+1], e.aux_new_capacity[k] <= big_M_capacity*e.segments_sos1_prev[k])
                 e.annualized_investment_cost_with_learning = @expression(model, sum(e.pwl_cost_slopes[k]*e.aux_new_capacity[k]*annualization_factor(e) for k in 1:n_segments+1))
-                # For reporting purposes
-                e.endog_annualized_cost = @expression(model, sum(e.pwl_cost_slopes[k]*e.segments_sos1_prev[k]*annualization_factor(e) for k in 1:n_segments+1))
                 ### Enf of linearization
+                # # For reporting purposes
+                e.endog_annualized_cost = @expression(model, sum(e.pwl_cost_slopes[k]*e.segments_sos1_prev[k]*annualization_factor(e) for k in 1:n_segments+1))
                 # Nonlinear version for benchmarking
                 # e.endog_investment_cost = learning_pwl_track(e, cost_period)*annualization_factor(e)
             end
