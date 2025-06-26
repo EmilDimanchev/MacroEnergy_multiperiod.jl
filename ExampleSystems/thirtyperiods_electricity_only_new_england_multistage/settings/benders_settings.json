@@ -1,6 +1,6 @@
 {
-  "MaxIter": 500,
-  "MaxCpuTime": 30000,
+  "MaxIter": 200,
+  "MaxCpuTime": 21000,
   "ConvTol": 1e-3,
   "StabParam": 0.5,
   "StabDynamic": false,
