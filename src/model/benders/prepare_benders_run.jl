@@ -56,9 +56,13 @@ function start_distributed_processes!(number_of_processes::Int64,case_path::Abst
     # rmprocs.(workers())
 
     if haskey(ENV,"SLURM_NTASKS")
+        @info "Initializing SLURM configuration"
+        using SlurmClusterManager
         ntasks = min(number_of_processes,parse(Int, ENV["SLURM_NTASKS"]));
+        @debug "Using $ntasks processes/workers (from SLURM_NTASKS)"
         cpus_per_task = parse(Int, ENV["SLURM_CPUS_PER_TASK"]);
-        addprocs(ClusterManagers.SlurmManager(ntasks);exeflags=["-t $cpus_per_task"])
+        @debug "Using $cpus_per_task threads per process (from SLURM_CPUS_PER_TASK)"
+        addprocs(SlurmManager(ntasks); exeflags=["-t $cpus_per_task"], topology=:master_worker)
     else
         ntasks = min(number_of_processes,Sys.CPU_THREADS)
         cpus_per_task = 1;
@@ -70,7 +74,6 @@ function start_distributed_processes!(number_of_processes::Int64,case_path::Abst
     @sync for p in workers()
         @async create_worker_process(p,project,case_path) # add a check
     end
-    
 
     @info("Number of procs: ", nprocs())
     @info("Number of workers: ", nworkers())
