@@ -8,7 +8,7 @@ function run_case(
     # Benders
     planning_optimizer::DataType=Gurobi.Optimizer,
     subproblem_optimizer::DataType=Gurobi.Optimizer,
-    planning_optimizer_attributes::Tuple=("BarConvTol" => 1e-3, "Crossover" => 0, "Method" => 2, "BarHomogeneous" => 1, "NumericFocus" => 2),
+    planning_optimizer_attributes::Tuple=("BarConvTol" => 1e-3, "Crossover" => 0, "Method" => 2, "BarHomogeneous" => 1),
     subproblem_optimizer_attributes::Tuple=("BarConvTol" => 1e-3, "Crossover" => 0, "Method" => 2, "BarHomogeneous" => 1)
 )
     @info("Running case at $(case_path)")
