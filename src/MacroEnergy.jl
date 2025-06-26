@@ -15,7 +15,6 @@ using MacroEnergySolvers
 using Pkg
 using DistributedArrays
 using Distributed
-using ClusterManagers
 using Gurobi
 using GitHub
 using Markdown
