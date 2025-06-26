@@ -57,7 +57,6 @@ function start_distributed_processes!(number_of_processes::Int64,case_path::Abst
 
     if haskey(ENV,"SLURM_NTASKS")
         @info "Initializing SLURM configuration"
-        using SlurmClusterManager
         ntasks = min(number_of_processes,parse(Int, ENV["SLURM_NTASKS"]));
         @debug "Using $ntasks processes/workers (from SLURM_NTASKS)"
         cpus_per_task = parse(Int, ENV["SLURM_CPUS_PER_TASK"]);
