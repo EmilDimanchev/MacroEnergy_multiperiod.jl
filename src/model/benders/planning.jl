@@ -54,9 +54,6 @@ function generate_planning_problem(case::Case)
         
         @info(" -- Defining available capacity")
         define_available_capacity!(system, model)
-
-        @info(" -- Add any endogenous technological learning")
-        add_learning!(system, model)
         
         @info(" -- Generating planning model")
         add_learning!(system, model) # for any technologies with endogenous learning
